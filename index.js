@@ -17,7 +17,6 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS
 
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/test', (req, res) => { res.send('Hello') })
 app.get('/', async(req, res) => {
     const shortUrls = await ShortUrl.find();
     res.send(shortUrls);
