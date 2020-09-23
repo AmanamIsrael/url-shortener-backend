@@ -1,25 +1,35 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const app = express();
+var bodyParser = require('body-parser')
 const ShortUrl = require('./models/shorturl');
 
-mongoose.connect('mongodb://localhost/urlShortener', {
+
+
+const app = express();
+app.use(bodyParser.json());
+
+
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hpxnv.mongodb.net/${process.env.DB_PROJECT_NAME}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-})
+});
 
-app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
 app.get('/', async(req, res) => {
     const shortUrls = await ShortUrl.find();
-    res.render('index', { shortUrls: shortUrls });
-})
+    res.send(shortUrls);
+});
 
 app.post('/shortUrls', async(req, res) => {
-    await ShortUrl.create({ full: req.body.fullUrl });
-    res.redirect('/');
-})
+    try {
+        let response = await ShortUrl.create(req.body);
+        res.json(response)
+    } catch (err) {
+        console.log(err)
+    }
+});
 
 app.get('/:shortUrl', async(req, res) => {
     const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl });
