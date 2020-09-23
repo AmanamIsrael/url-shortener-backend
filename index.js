@@ -9,7 +9,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors);
+app.use(cors());
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hpxnv.mongodb.net/${process.env.DB_PROJECT_NAME}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
