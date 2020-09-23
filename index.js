@@ -9,10 +9,11 @@ const ShortUrl = require('./models/shorturl');
 const app = express();
 app.use(bodyParser.json());
 
-
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hpxnv.mongodb.net/${process.env.DB_PROJECT_NAME}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
 });
 
 app.use(express.urlencoded({ extended: false }));
